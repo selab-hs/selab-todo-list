@@ -1,0 +1,42 @@
+package kr.co.selab.selabtodo.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
+@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public class ToDoList {
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "todolist_id")
+  private Long id;
+
+  @NonNull
+  private String content;
+
+  @Column(columnDefinition = "boolean default false")
+  private Boolean isCompleted;
+
+  @Column(name="crated_date", columnDefinition = "DATE")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+  private LocalDateTime createdDateTime;
+
+  @Override
+  public String toString(){
+    return "ToDoList  [id=" + id +
+        ", content=" + content +
+        ", isComplete=" + isCompleted + "]";
+  }
+}
