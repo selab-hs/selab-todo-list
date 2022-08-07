@@ -1,4 +1,4 @@
-package kr.co.selab.selabtodo.config;
+package kr.co.selab.selabtodo.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +31,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     return new Docket(DocumentationType.SWAGGER_2)
         .useDefaultResponseMessages(false)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.RaiseMeUp.HH"))
+        .apis(RequestHandlerSelectors.basePackage("kr.co.selab.selabtodo"))
         .apis(RequestHandlerSelectors.any())
         .paths(PathSelectors.ant("/api/**"))
         .build()
