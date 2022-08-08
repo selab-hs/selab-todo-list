@@ -1,8 +1,6 @@
 package kr.co.selab.selabtodo.application;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import javax.persistence.Id;
 import kr.co.selab.selabtodo.domain.ToDoList;
 import kr.co.selab.selabtodo.dto.request.CreateToDoRequest;
 import kr.co.selab.selabtodo.dto.request.UpdateToDoRequest;
