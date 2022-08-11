@@ -5,19 +5,26 @@ import kr.co.selab.selabtodo.domain.ToDoList;
 import kr.co.selab.selabtodo.dto.request.CreateToDoRequest;
 import kr.co.selab.selabtodo.dto.request.UpdateToDoRequest;
 import kr.co.selab.selabtodo.infrastructure.ToDoListRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ToDoListService {
 
   private final ToDoListRepository todoRepository;
 
   public List<ToDoList> getTodos(Sort sort) {
     return todoRepository.findAll(sort);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<ToDoList> pageable(Pageable pageable){
+    return todoRepository.findAll(pageable);
   }
 
   public void deleteTodo(Long id) {
