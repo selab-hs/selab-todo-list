@@ -1,6 +1,7 @@
 package kr.co.selab.selabtodo.application;
 
 import java.util.List;
+import java.util.Optional;
 import kr.co.selab.selabtodo.domain.ToDoList;
 import kr.co.selab.selabtodo.dto.request.CreateToDoRequest;
 import kr.co.selab.selabtodo.dto.request.UpdateToDoRequest;
@@ -32,8 +33,8 @@ public class ToDoListService {
   }
 
 
-  public ToDoList findTodoById(Long Id) {
-    return todoRepository.findById(Id).orElse(new ToDoList());
+  public Optional<ToDoList> findTodoById(Long Id) {
+    return todoRepository.findById(Id);
   }
 
   @Transactional
