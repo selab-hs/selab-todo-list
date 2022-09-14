@@ -16,4 +16,6 @@
 - [Review 진행방법](https://github.com/selab-hs/selab-git)
 
 ### To-Do-List 요구사항 정리
-- 할일 생성
+- 아이템 추가
+- 특정 아이템 조회, 수정, 삭제
+- 전체 아이템 조회, 전체 아이템 삭제
