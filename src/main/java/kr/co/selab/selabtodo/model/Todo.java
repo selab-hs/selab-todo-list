@@ -1,7 +1,7 @@
 package kr.co.selab.selabtodo.model;
 
 import kr.co.selab.selabtodo.common.BaseEntity;
-import kr.co.selab.selabtodo.model.dto.TodoReq;
+import kr.co.selab.selabtodo.model.dto.TodoRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class Todo extends BaseEntity {
         this.completed = completed;
     }
 
-    public static Todo buildTodo(TodoReq request) {
+    public static Todo buildTodo(TodoRequest request) {
         return Todo.builder()
                 .title(request.getTitle())
                 .order(request.getOrder())

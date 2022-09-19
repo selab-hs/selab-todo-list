@@ -8,6 +8,6 @@ import java.util.List;
 
 @Builder
 @AllArgsConstructor
-public class TodosRes {
+public class TodosResponse {
     private List<Todo> todos;
 }

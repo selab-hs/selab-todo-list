@@ -1,7 +1,7 @@
 package kr.co.selab.selabtodo.service;
 
 import kr.co.selab.selabtodo.model.Todo;
-import kr.co.selab.selabtodo.model.dto.TodoReq;
+import kr.co.selab.selabtodo.model.dto.TodoRequest;
 import kr.co.selab.selabtodo.repository.TodoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ class TodoServiceTest {
 
     @Test
     void createTodo() {
-        TodoReq todo1 = new TodoReq("title", 1L, false);
+        TodoRequest todo1 = new TodoRequest("title", 1L, false);
         Todo serviceTodo = todoService.createTodo(todo1);
         Todo repTodo = todoRepository.getById(serviceTodo.getId());
         assertEquals(todo1.getTitle(), repTodo.getTitle());
@@ -30,7 +30,7 @@ class TodoServiceTest {
 
     @Test
     void getTodo() {
-        TodoReq todo1 = new TodoReq("title", 1L, false);
+        TodoRequest todo1 = new TodoRequest("title", 1L, false);
         Todo serviceTodo = todoService.createTodo(todo1);
         Todo getTodo = todoService.getTodo(serviceTodo.getId());
         assertEquals(todo1.getTitle(), getTodo.getTitle());
