@@ -1,11 +1,13 @@
 package kr.co.selab.selabtodo.model;
 
 import kr.co.selab.selabtodo.common.BaseEntity;
-import kr.co.selab.selabtodo.model.dto.TodoRequest;
+import kr.co.selab.selabtodo.model.dto.CreateRequest;
+import kr.co.selab.selabtodo.model.dto.UpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,23 +40,17 @@ public class Todo extends BaseEntity {
         this.completed = completed;
     }
 
-    public static Todo buildTodo(TodoRequest request) {
+    public static Todo buildTodo(CreateRequest request) {
         return Todo.builder()
-                .title(request.getTitle())
-                .order(request.getOrder())
-                .completed(request.getCompleted())
+                .title(request.title())
+                .order(request.order())
+                .completed(false)
                 .build();
     }
 
-    public void updateTitle(String title) {
-        this.title = title;
-    }
-
-    public void updateOrder(Long order) {
-        this.order = order;
-    }
-
-    public void updateCompleted(Boolean completed) {
-        this.completed = completed;
+    public void update(UpdateRequest request) {
+        this.title = request.title();
+        this.order = request.order();
+        this.completed = request.completed();
     }
 }

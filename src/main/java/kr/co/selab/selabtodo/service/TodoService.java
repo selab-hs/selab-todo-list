@@ -1,11 +1,17 @@
 package kr.co.selab.selabtodo.service;
 
+import kr.co.selab.selabtodo.error.exception.NotExistsTodoException;
 import kr.co.selab.selabtodo.model.Todo;
+import kr.co.selab.selabtodo.model.dto.CreateRequest;
 import kr.co.selab.selabtodo.model.dto.TodoRequest;
 import kr.co.selab.selabtodo.model.dto.TodosResponse;
+import kr.co.selab.selabtodo.model.dto.UpdateRequest;
 import kr.co.selab.selabtodo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -13,12 +19,12 @@ import org.springframework.stereotype.Service;
 public class TodoService {
     private final TodoRepository todoRepository;
 
-    // 특정 아이템 조회
+    @Transactional(readOnly = true)
     public Todo getTodo(Long id) {
-        return todoRepository.getById(id);
+        return todoRepository.findById(id).orElseThrow(NotExistsTodoException::new);
     }
 
-    // 모든 아이템 조회
+    @Transactional(readOnly = true)
     public TodosResponse getTodos() {
         return TodosResponse.builder()
                 .todos(todoRepository.findAll())
@@ -26,28 +32,28 @@ public class TodoService {
     }
 
     // 투두리스트에 아이템 추가
-    public Todo createTodo(TodoRequest request) {
-        return todoRepository.save(Todo.buildTodo(request));
+    public Todo createTodo(CreateRequest request) {
+        return todoRepository.save(Todo.builder()
+                        .title(request.title())
+                        .order(request.order())
+                        .completed(false)
+                .build());
     }
 
-    // 특정 아이템 수정
-    public Todo updateTodo(Long id, TodoRequest todoRequest) {
-        Todo todo = todoRepository.getById(id);
-        if(todoRequest.getTitle() != null) {
-            todo.updateTitle(todoRequest.getTitle());
-        }
-        if(todoRequest.getOrder() != null) {
-            todo.updateOrder(todoRequest.getOrder());
-        }
-        if(todoRequest.getCompleted() != null) {
-            todo.updateCompleted(todoRequest.getCompleted());
-        }
-        return todoRepository.save(todo);
+    @Transactional
+    public Todo updateTodo(Long id, UpdateRequest request) {
+        Todo todo = getTodo(id);
+        todo.update(request);
+        return getTodo(id);
     }
 
     // 특정 아이템 삭제
-    public void deleteTodo(Long id) {
+    public Boolean deleteTodo(Long id) {
         todoRepository.deleteById(id);
+        if(todoRepository.findById(id).isPresent()) {
+            return false;
+        }
+        return true;
     }
 
     // 전체 아이템 삭제
