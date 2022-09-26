@@ -1,4 +1,7 @@
 package kr.co.selab.selabtodo.model.dto;
 
-public record CreateRequest(String title, Long order) {
+public record CreateRequest(
+           String title, 
+           Long order
+) {
 }
