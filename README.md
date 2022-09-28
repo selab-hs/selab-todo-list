@@ -14,3 +14,17 @@
 - SELAB 구성원 모두가 편하게 리뷰를 진행해주시면 될 것 같아요!
 - 스터디를 참여하는 인원에게 도움이 될 수 있는 리뷰를 부탁드려요!
 - [Review 진행방법](https://github.com/selab-hs/selab-git)
+
+---
+
+### TodoEntity Class
+고유 ID(Id), 할 일(title), 순서(order), 처리 여부(checked)
+
+### TodoRepository Class
+JpaRepository를 상속 받아 TodoRepository를 생성한다.
+
+### TodoService Class
+repository를 주입 받아 생성, 수정, 삭제, 조회를 실행한다.
+
+### TodoController Class
+URL Mapping을 통해 알맞은 화면을 보여준다.
