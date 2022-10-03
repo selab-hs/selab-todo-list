@@ -49,16 +49,14 @@ public class TodoController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteTodo(@PathVariable("id") Long id) {
         todoService.deleteTodo(id);
-        String message = "해당 할 일이 삭제되었습니다";
-        return ResponseDto.ok(message);
+        return ResponseDto.noContent();
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteAllTodo() {
+    public ResponseEntity<Void> deleteAllTodo() {
         todoService.deleteAll();
-        String result = "모든 할 일이 삭제되었습니다";
-        return ResponseDto.ok(result);
+        return ResponseDto.noContent();
     }
 }
