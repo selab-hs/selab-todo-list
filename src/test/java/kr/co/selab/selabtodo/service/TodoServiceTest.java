@@ -1,39 +1,46 @@
 package kr.co.selab.selabtodo.service;
 
 import kr.co.selab.selabtodo.model.Todo;
-import kr.co.selab.selabtodo.model.dto.TodoRequest;
+import kr.co.selab.selabtodo.model.dto.CreateRequest;
 import kr.co.selab.selabtodo.repository.TodoRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @Transactional
+@ExtendWith(MockitoExtension.class)
 class TodoServiceTest {
 
-    @Autowired
-    TodoService todoService;
+    @Mock
+    private TodoRepository todoRepository;
 
-    @Autowired
-    TodoRepository todoRepository;
+    @InjectMocks
+    private TodoService todoService;
 
-//    @Test
-//    void createTodo() {
-//        TodoRequest todo1 = new TodoRequest("title", 1L, false);
-//        Todo serviceTodo = todoService.createTodo(todo1);
-//        Todo repTodo = todoRepository.getById(serviceTodo.getId());
-//        assertEquals(todo1.getTitle(), repTodo.getTitle());
-//    }
+    @Test
+    void createTodo() {
+        when(this.todoRepository.save(any(Todo.class)))
+                .then(AdditionalAnswers.returnsFirstArg());
+
+        CreateRequest expected = new CreateRequest("test", 1L);
+        Todo actual = this.todoService.createTodo(expected);
+
+        assertEquals(expected.title(), actual.getTitle());
+    }
 
     @Test
     void getTodo() {
-//        TodoRequest todo1 = new TodoRequest("title", 1L, false);
-//        Todo serviceTodo = todoService.createTodo(todo1);
-//        Todo getTodo = todoService.getTodo(serviceTodo.getId());
-//        assertEquals(todo1.getTitle(), getTodo.getTitle());
     }
 
     @Test
