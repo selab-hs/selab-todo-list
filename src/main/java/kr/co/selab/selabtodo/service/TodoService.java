@@ -45,6 +45,9 @@ public class TodoService {
 
     @Transactional
     public void deleteTodo(Long id) {
+        if(!todoRepository.existsById(id)) {
+            throw new NotExistsTodoException();
+        }
         todoRepository.deleteById(id);
     }
 

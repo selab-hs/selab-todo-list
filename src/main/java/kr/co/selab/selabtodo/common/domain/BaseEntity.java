@@ -1,4 +1,4 @@
-package kr.co.selab.selabtodo.common;
+package kr.co.selab.selabtodo.common.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

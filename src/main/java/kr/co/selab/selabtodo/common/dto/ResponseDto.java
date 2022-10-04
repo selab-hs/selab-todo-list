@@ -1,4 +1,4 @@
-package kr.co.selab.selabtodo.common;
+package kr.co.selab.selabtodo.common.dto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

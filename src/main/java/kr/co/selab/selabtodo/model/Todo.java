@@ -1,13 +1,12 @@
 package kr.co.selab.selabtodo.model;
 
-import kr.co.selab.selabtodo.common.BaseEntity;
+import kr.co.selab.selabtodo.common.domain.BaseEntity;
 import kr.co.selab.selabtodo.model.dto.CreateRequest;
 import kr.co.selab.selabtodo.model.dto.UpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
