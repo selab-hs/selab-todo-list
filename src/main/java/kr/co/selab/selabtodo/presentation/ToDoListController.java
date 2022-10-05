@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import java.util.Optional;
 import kr.co.selab.selabtodo.application.ToDoListService;
-import kr.co.selab.selabtodo.common.converter.ResponseConverter;
+import kr.co.selab.selabtodo.common.Handler.BoardResponseHandler;
 import kr.co.selab.selabtodo.common.dto.ResponseDto;
 import kr.co.selab.selabtodo.common.dto.ResponseMessage;
 import kr.co.selab.selabtodo.domain.ToDoList;
@@ -43,12 +43,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ToDoListController {
 
   private final ToDoListService toDoListService;
-  private final ResponseConverter responseConverter;
+  private final BoardResponseHandler responseConverter;
 
   @ApiOperation("ToDo 전체 검색")
   @GetMapping(value = "/searchAll", produces = MediaType.APPLICATION_PROBLEM_JSON_VALUE)
-  public ResponseEntity<ResponseDto> getAllTodos() {
-    List<ToDoList> toDoLists = toDoListService.getTodos(Sort.by(Direction.ASC, "id"));
+  public ResponseEntity<ResponseDto> getAllTodos(
+      @PageableDefault(sort = "id", direction = Direction.ASC)
+      Pageable pageable) {
+    List<ToDoList> toDoLists = toDoListService.getTodos(pageable);
     return responseConverter.toResponseEntity(
         ResponseMessage.READ_ALL_TODO_SUCCESS,
         toDoLists
@@ -81,7 +83,7 @@ public class ToDoListController {
   @PostMapping
   public ResponseEntity<ResponseDto> postToDo(@RequestBody CreateToDoRequest createToDoRequest) {
     toDoListService.createToDo(createToDoRequest);
-    return responseConverter.toResponseEntity(ResponseMessage.CREATE_TODO_SUCCESS, "ok");
+    return responseConverter.toResponseEntity(ResponseMessage.CREATE_TODO_SUCCESS, "ToDo가 생성되었습니다.");
   }
 
   @ApiOperation("ToDo 수정")
@@ -89,13 +91,13 @@ public class ToDoListController {
   public ResponseEntity<ResponseDto> patchToDo(@PathVariable("id") Long id,
       @RequestBody UpdateToDoRequest updateToDoRequest) {
     toDoListService.updateToDo(id, updateToDoRequest);
-    return responseConverter.toResponseEntity(ResponseMessage.UPDATE_TODO_SUCCESS, "ok");
+    return responseConverter.toResponseEntity(ResponseMessage.UPDATE_TODO_SUCCESS, "ToDo가 수정되었습니다.");
   }
 
   @ApiOperation("ToDo 삭제")
   @DeleteMapping("/{id}")
   public ResponseEntity<ResponseDto> deleteToDo(@PathVariable("id") Long id) {
     toDoListService.deleteTodo(id);
-    return responseConverter.toResponseEntity(ResponseMessage.DELETE_TODO_SUCCESS, "ok");
+    return responseConverter.toResponseEntity(ResponseMessage.DELETE_TODO_SUCCESS, "ToDo가 삭제 되었습니다");
   }
 }

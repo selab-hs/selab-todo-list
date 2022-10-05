@@ -2,6 +2,8 @@ package kr.co.selab.selabtodo.application;
 
 import java.util.List;
 import java.util.Optional;
+import kr.co.selab.selabtodo.common.err.ErrorMessage;
+import kr.co.selab.selabtodo.common.err.exception.NullPointException;
 import kr.co.selab.selabtodo.domain.ToDoList;
 import kr.co.selab.selabtodo.dto.request.CreateToDoRequest;
 import kr.co.selab.selabtodo.dto.request.UpdateToDoRequest;
@@ -9,7 +11,6 @@ import kr.co.selab.selabtodo.infrastructure.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,8 @@ public class ToDoListService {
 
   private final ToDoListRepository todoRepository;
 
-  public List<ToDoList> getTodos(Sort sort) {
-    return todoRepository.findAll(sort);
+  public List<ToDoList> getTodos(Pageable pageable) {
+    return todoRepository.findAllTodo(pageable);
   }
 
   @Transactional(readOnly = true)
@@ -50,7 +51,7 @@ public class ToDoListService {
   public void updateToDo(Long id, UpdateToDoRequest updateToDoRequest) {
     ToDoList todo = todoRepository.findById(id)
         .orElseThrow(()-> {
-          throw new NullPointerException();
+          throw new NullPointException(ErrorMessage.NOT_FIND_ID_TODO);
         });
     todo.update(updateToDoRequest.getContent(),updateToDoRequest.getIsCompleted());
   }

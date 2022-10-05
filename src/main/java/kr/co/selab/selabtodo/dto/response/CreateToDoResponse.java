@@ -1,6 +1,5 @@
 package kr.co.selab.selabtodo.dto.response;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
