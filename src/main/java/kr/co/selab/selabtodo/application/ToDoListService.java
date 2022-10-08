@@ -3,7 +3,7 @@ package kr.co.selab.selabtodo.application;
 import java.util.List;
 import java.util.Optional;
 import kr.co.selab.selabtodo.common.err.ErrorMessage;
-import kr.co.selab.selabtodo.common.err.exception.NullPointException;
+import kr.co.selab.selabtodo.common.err.exception.NullPointerException;
 import kr.co.selab.selabtodo.domain.ToDoList;
 import kr.co.selab.selabtodo.dto.request.CreateToDoRequest;
 import kr.co.selab.selabtodo.dto.request.UpdateToDoRequest;
@@ -20,8 +20,8 @@ public class ToDoListService {
 
   private final ToDoListRepository todoRepository;
 
-  public List<ToDoList> getTodos(Pageable pageable) {
-    return todoRepository.findAllTodo(pageable);
+  public Page<ToDoList> getTodos(Pageable pageable) {
+    return todoRepository.findAll(pageable);
   }
 
   @Transactional(readOnly = true)
@@ -51,7 +51,7 @@ public class ToDoListService {
   public void updateToDo(Long id, UpdateToDoRequest updateToDoRequest) {
     ToDoList todo = todoRepository.findById(id)
         .orElseThrow(()-> {
-          throw new NullPointException(ErrorMessage.NOT_FIND_ID_TODO);
+          throw new NullPointerException(ErrorMessage.NOT_FIND_ID_TODO);
         });
     todo.update(updateToDoRequest.getContent(),updateToDoRequest.getIsCompleted());
   }

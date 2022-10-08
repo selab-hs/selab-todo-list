@@ -50,7 +50,7 @@ public class ToDoListController {
   public ResponseEntity<ResponseDto> getAllTodos(
       @PageableDefault(sort = "id", direction = Direction.ASC)
       Pageable pageable) {
-    List<ToDoList> toDoLists = toDoListService.getTodos(pageable);
+    Page<ToDoList> toDoLists = toDoListService.getTodos(pageable);
     return responseConverter.toResponseEntity(
         ResponseMessage.READ_ALL_TODO_SUCCESS,
         toDoLists
