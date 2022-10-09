@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class TodoService {
@@ -24,9 +28,9 @@ public class TodoService {
 
     @Transactional(readOnly = true)
     public TodosResponse getTodos() {
-        return TodosResponse.builder()
-                .todos(todoRepository.findAll())
-                .build();
+        List<Todo> todos = todoRepository.findAll();
+        List<TodoResponse> responses = todos.stream().map(TodoResponse::of).collect(Collectors.toList());
+        return new TodosResponse(responses);
     }
 
     @Transactional
