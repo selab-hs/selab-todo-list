@@ -1,11 +1,10 @@
 package kr.co.selab.selabtodo.controller;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Swagger;
 import kr.co.selab.selabtodo.common.dto.ResponseDto;
 import kr.co.selab.selabtodo.common.dto.SwaggerNote;
-import kr.co.selab.selabtodo.model.Todo;
 import kr.co.selab.selabtodo.model.dto.CreateRequest;
+import kr.co.selab.selabtodo.model.dto.TodoResponse;
 import kr.co.selab.selabtodo.model.dto.TodosResponse;
 import kr.co.selab.selabtodo.model.dto.UpdateRequest;
 import kr.co.selab.selabtodo.service.TodoService;
@@ -36,22 +35,22 @@ public class TodoController {
 
     @ApiOperation(value = "Todo list 단건 조회", notes = SwaggerNote.TODO_READ_ONE_NOTE)
     @GetMapping("{id}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable("id") Long id) {
-        Todo todo = todoService.getTodo(id);
+    public ResponseEntity<TodoResponse> getTodoById(@PathVariable("id") Long id) {
+        TodoResponse todo = todoService.getTodo(id);
         return ResponseDto.ok(todo);
     }
 
     @ApiOperation(value = "Todo 생성하기", notes = SwaggerNote.TODO_CREATE_NOTE)
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody CreateRequest request) {
-        Todo todo = todoService.createTodo(request);
-        return ResponseDto.ok(todo);
+    public ResponseEntity<TodoResponse> createTodo(@RequestBody CreateRequest request) {
+        TodoResponse todo = todoService.createTodo(request);
+        return ResponseDto.created(todo);
     }
 
     @ApiOperation(value = "Todo 수정하기", notes = SwaggerNote.TODO_UPDATE_NOTE)
     @PatchMapping("{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable("id") Long id, @RequestBody UpdateRequest request) {
-        Todo todo = todoService.updateTodo(id, request);
+    public ResponseEntity<TodoResponse> updateTodo(@PathVariable("id") Long id, @RequestBody UpdateRequest request) {
+        TodoResponse todo = todoService.updateTodo(id, request);
         return ResponseDto.ok(todo);
     }
 

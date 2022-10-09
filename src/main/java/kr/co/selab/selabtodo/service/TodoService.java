@@ -3,6 +3,7 @@ package kr.co.selab.selabtodo.service;
 import kr.co.selab.selabtodo.error.exception.NotExistsTodoException;
 import kr.co.selab.selabtodo.model.Todo;
 import kr.co.selab.selabtodo.model.dto.CreateRequest;
+import kr.co.selab.selabtodo.model.dto.TodoResponse;
 import kr.co.selab.selabtodo.model.dto.TodosResponse;
 import kr.co.selab.selabtodo.model.dto.UpdateRequest;
 import kr.co.selab.selabtodo.repository.TodoRepository;
@@ -16,8 +17,9 @@ public class TodoService {
     private final TodoRepository todoRepository;
 
     @Transactional(readOnly = true)
-    public Todo getTodo(Long id) {
-        return todoRepository.findById(id).orElseThrow(NotExistsTodoException::new);
+    public TodoResponse getTodo(Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow(NotExistsTodoException::new);
+        return TodoResponse.of(todo);
     }
 
     @Transactional(readOnly = true)
@@ -28,19 +30,21 @@ public class TodoService {
     }
 
     @Transactional
-    public Todo createTodo(CreateRequest request) {
-        return todoRepository.save(Todo.builder()
-                        .title(request.title())
-                        .order(request.order())
-                        .completed(Boolean.FALSE)
+    public TodoResponse createTodo(CreateRequest request) {
+        Todo todo = todoRepository.save(Todo.builder()
+                .title(request.title())
+                .order(request.order())
+                .completed(Boolean.FALSE)
                 .build());
+
+        return TodoResponse.of(todo);
     }
 
     @Transactional
-    public Todo updateTodo(Long id, UpdateRequest request) {
-        Todo todo = getTodo(id);
+    public TodoResponse updateTodo(Long id, UpdateRequest request) {
+        Todo todo = todoRepository.getById(id);
         todo.update(request);
-        return getTodo(id);
+        return TodoResponse.of(todo);
     }
 
     @Transactional
