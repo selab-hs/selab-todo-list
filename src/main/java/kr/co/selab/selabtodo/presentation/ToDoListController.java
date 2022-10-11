@@ -14,6 +14,8 @@ import kr.co.selab.selabtodo.common.dto.ResponseMessage;
 import kr.co.selab.selabtodo.domain.ToDoList;
 import kr.co.selab.selabtodo.dto.request.CreateToDoRequest;
 import kr.co.selab.selabtodo.dto.request.UpdateToDoRequest;
+import kr.co.selab.selabtodo.dto.response.CreateToDoResponse;
+import kr.co.selab.selabtodo.dto.response.UpdateToDoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +52,7 @@ public class ToDoListController {
   public ResponseEntity<ResponseDto> getAllTodos(
       @PageableDefault(sort = "id", direction = Direction.ASC)
       Pageable pageable) {
-    Page<ToDoList> toDoLists = toDoListService.getTodos(pageable);
+    Page<CreateToDoResponse> toDoLists = toDoListService.getTodos(pageable);
     return responseConverter.toResponseEntity(
         ResponseMessage.READ_ALL_TODO_SUCCESS,
         toDoLists
@@ -62,7 +64,7 @@ public class ToDoListController {
   public ResponseEntity<ResponseDto> getPaging(
       @PageableDefault(sort = "id", direction = Direction.DESC)
           Pageable pageable) {
-    Page<ToDoList> pageables = toDoListService.pageable(pageable);
+    Page<CreateToDoResponse> pageables = toDoListService.getTodos(pageable);
     return responseConverter.toResponseEntity(
         ResponseMessage.READ_ALL_TODO_SUCCESS,
         pageables
@@ -72,7 +74,7 @@ public class ToDoListController {
   @ApiOperation("ToDo 검색")
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto> getTodo(@PathVariable("id") Long id) {
-    Optional<ToDoList> toDo = toDoListService.findTodoById(id);
+    CreateToDoResponse toDo = toDoListService.findTodoById(id);
     return responseConverter.toResponseEntity(
         ResponseMessage.READ_TODO_SUCCESS,
         toDo
