@@ -17,14 +17,47 @@
 
 ---
 
-### TodoEntity Class
-고유 ID(Id), 할 일(title), 순서(order), 처리 여부(checked)
+## domain package
 
-### TodoRepository Class
-JpaRepository를 상속 받아 TodoRepository를 생성한다.
+- ### Item
+  - 고유 ID(Id), 할 일(title), 순서(order), 완료 여부(completed)
 
-### TodoService Class
-repository를 주입 받아 생성, 수정, 삭제, 조회를 실행한다.
+## repository package
 
-### TodoController Class
-URL Mapping을 통해 알맞은 화면을 보여준다.
+- ### ItemRepository Interface
+  - JpaRepository를 상속 받아 ItemRepository를 생성한다.
+
+- ### ItemSaveRequestDto Class
+  - 새로운 Item(할 일)을 생성할 때 쓰는 DTO. (리퀘스트 요청 시 사용)
+
+- ### ItemSaveResponseDto Class
+  - 새로운 Item(할 일)을 생성할 때 쓰는 DTO. (응답 반환 시 사용)
+
+- ### ItemUpdateRequestDto Class
+  - Item(할 일)을 수정할 때 쓰는 DTO. (리퀘스트 요청 시 사용)
+
+- ### ItemUpdateResponseDto Class
+  - Item(할 일)을 수정할 때 쓰는 DTO. (응답 반환 시 사용)
+
+## service package
+
+- ### ItemService Class
+  - 비즈니스 로직 부분 구현
+    - save(): Item(할 일)을 생성하는 메서드. RequestDto를 받아 itemRepository에 저장하고 ResponseDto로 반환값을 보여준다.
+    - update(): Id와 RequestDto를 받아 null이 아닌, 변경값이 있는 파라미터를 수정한다.
+    - findById(): Id를 받아 itemRepository에서 해당 Id의 값을 검색한다.
+    - findItems(): 전체 Item을 검색한다.
+    - deleteById(): Id를 받아 itemRepository에서 해당 Id의 값을 삭제한다.
+    - deleteAll(): 모든 Item을 삭제한다.
+
+## web package
+- ### HomeController Class
+  - home(): 기본 화면(/items)으로 갈 경우 전체 Item 목록을 보여준다.
+
+- ### ItemController Class
+  - items(): 전체 Item 목록을 보여준다.
+  - item(): item Id로 검색하면 해당 Id의 값을 보여준다.
+  - addItem(): 새로운 값(할 일 목록)을 추가한다.
+  - edit(): 해당 Id의 값(title, order, completed)을 수정한다.
+  - deleteById(): 해당 Id의 값을 삭제한다.
+  - deleteAll(): 모든 Item을 삭제한다.
