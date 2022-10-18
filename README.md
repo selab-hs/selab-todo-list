@@ -10,7 +10,19 @@
 - 기본적인 요구사항을 충족하면서, 본인이 생각하는 todo-list 요구사항을 추가적으로 구현해보세요!!
 - README를 작성해주세요 (요구사항, 스펙, 동작방법, api 설명 등...)
 
-### REVIEW 진행해주시면 감사하겠습니다!
-- SELAB 구성원 모두가 편하게 리뷰를 진행해주시면 될 것 같아요!
-- 스터디를 참여하는 인원에게 도움이 될 수 있는 리뷰를 부탁드려요!
-- [Review 진행방법](https://github.com/selab-hs/selab-git)
+## 기능
+### ToDo 생성
+- Method : Post (api/todo)
+- ResponseBody : TodoResponseDto
+### Todo 전체 조회
+- Method : Get (api/todo/all)
+- ResponseBody : InquiryTodoResponseDto
+### Todo 페이지 조회
+- Method : Get (api/todo?page=0)
+- ResponseBody : InquiryTodoPageResponseDto
+### Todo 값 변경
+- Method : Patch (api/todo/{id})
+- ResponseBody : TodoResponseDto
+### Todo 값 삭제
+- Method : Delete (APi/todo/{id})
+- ResponseBody : Long
