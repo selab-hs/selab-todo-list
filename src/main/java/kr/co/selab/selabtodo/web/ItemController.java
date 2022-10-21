@@ -1,53 +1,51 @@
 package kr.co.selab.selabtodo.web;
 
 import kr.co.selab.selabtodo.domain.Item;
-import kr.co.selab.selabtodo.repository.ItemSaveRequestDto;
-import kr.co.selab.selabtodo.repository.ItemSaveResponseDto;
-import kr.co.selab.selabtodo.repository.ItemUpdateRequestDto;
-import kr.co.selab.selabtodo.repository.ItemUpdateResponseDto;
+import kr.co.selab.selabtodo.repository.*;
 import kr.co.selab.selabtodo.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/v1/api/todo-list")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public List<Item> items() {
-        return itemService.findItems();
+    public ResponseEntity<List<Item>> items() {
+        return ResponseEntity.ok(itemService.findItems());
     }
 
     @GetMapping("/{itemId}")
-    public Item item(@PathVariable Long itemId) {
+    public ResponseEntity<Item> item(@PathVariable Long itemId) {
         Item item = itemService.findById(itemId).get();
-        return item;
+        return ResponseEntity.ok(item);
     }
 
-    @PostMapping("/add")
-    public ItemSaveResponseDto addItem(@RequestBody ItemSaveRequestDto item) {
+    @PostMapping("/post/list")
+    public ResponseEntity<ItemSaveResponseDto> addItem(@Valid @RequestBody ItemSaveRequestDto item) {
         ItemSaveResponseDto savedItem = itemService.save(item);
-        return savedItem;
+        return ResponseEntity.ok(savedItem);
     }
 
-    @PatchMapping("/{itemId}/edit")
-    public ItemUpdateResponseDto edit(@PathVariable Long itemId, @RequestBody ItemUpdateRequestDto updateParam) {
-        System.out.println("수정");
+    @PatchMapping("/edit/{itemId}")
+    public ResponseEntity<ItemUpdateResponseDto> edit(@PathVariable Long itemId, @RequestBody ItemUpdateRequestDto updateParam) {
         ItemUpdateResponseDto updatedItem = itemService.update(itemId, updateParam);
-        return updatedItem;
+        return ResponseEntity.ok(updatedItem);
     }
 
-    @DeleteMapping("/{itemId}/delete")
-    public List<Item> deleteById(@PathVariable Long itemId) {
+    @DeleteMapping("/delete/{itemId}")
+    public ResponseEntity<List<Item>> deleteById(@PathVariable Long itemId) {
         itemService.deleteById(itemId);
-        return itemService.findItems();
+        return ResponseEntity.ok(itemService.findItems());
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/lists")
     public void deleteAll() {
         itemService.deleteAll();
     }
