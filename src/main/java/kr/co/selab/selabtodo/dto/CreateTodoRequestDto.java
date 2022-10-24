@@ -4,11 +4,16 @@ import kr.co.selab.selabtodo.entity.TodoEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @NoArgsConstructor
 public class CreateTodoRequestDto {
     String title;
+
     String content;
+
     boolean checked;
 
     public CreateTodoRequestDto(String title, String content){

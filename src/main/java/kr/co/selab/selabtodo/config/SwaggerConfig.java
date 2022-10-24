@@ -1,5 +1,6 @@
 package kr.co.selab.selabtodo.config;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -17,7 +18,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("kr.co.selab.selabtodo.controller"))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(Operation.class))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.RelationNotFoundException;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @RestController
 @RequestMapping("api/todo/v1")
@@ -21,25 +23,29 @@ public class TodoController{
     @Operation(summary = "Create Todo-List", description = "title과 content 요청 값으로 Todo List 생성")
     @PostMapping
     public ResponseEntity<TodoResponseDto> createTodo(@RequestBody CreateTodoRequestDto todo){
-        return ResponseEntity.ok(service.createTodo(todo));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.createTodo(todo));
     }
 
     @Operation(summary = "Update Todo-List", description = "id를 통한 조회 및 Todo-List 업데이트")
     @PatchMapping("/{id}")
-    public ResponseEntity<TodoResponseDto> updateTodo(@PathVariable long id, @RequestBody UpdateTodoRequestDto todo) throws RelationNotFoundException {
-        return ResponseEntity.ok(service.updateTodo(id,todo));
+    public ResponseEntity<TodoResponseDto> updateTodo(@PathVariable @Positive long id,
+                                                      @RequestBody UpdateTodoRequestDto todo) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.updateTodo(id,todo));
     }
 
     @Operation(summary = "Delete Todo-List", description = "id를 통한 Todo-List 삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteTodoById(@PathVariable long id){
+    public ResponseEntity<Long> deleteTodoById(@PathVariable @Positive long id){
         service.deleteTodoById(id);
         return ResponseEntity.ok(id);
     }
 
     @Operation(summary = "Search Todo-List Page", description = "특정 페이지의 Todo-List를 5개씩 역순으로 조회")
     @GetMapping
-    public ResponseEntity<InquiryTodoPageResponseDto> searchPageTodos(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable page){
+    public ResponseEntity<InquiryTodoPageResponseDto> searchPageTodos(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) @PositiveOrZero Pageable page){
         return ResponseEntity.ok(service.searchPageTodos(page));
     }
 
