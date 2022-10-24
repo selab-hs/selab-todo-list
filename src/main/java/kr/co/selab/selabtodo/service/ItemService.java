@@ -1,6 +1,7 @@
 package kr.co.selab.selabtodo.service;
 
 import kr.co.selab.selabtodo.domain.Item;
+import kr.co.selab.selabtodo.exception.CustomException;
 import kr.co.selab.selabtodo.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static kr.co.selab.selabtodo.exception.ErrorCode.*;
 
 @Service
 @Transactional
@@ -24,19 +27,11 @@ public class ItemService {
     }
 
     public ItemUpdateResponseDto update(Long itemId, ItemUpdateRequestDto updateParam) {
-        Item updatedItem = itemRepository.findById(itemId).orElseThrow();
+        Item updatedItem = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ID_NOT_FOUND));
 
-        if (updateParam.getTitle() != null) {
-            updatedItem.setTitle(updateParam.getTitle());
-        }
-
-        if (updateParam.getOrder() != null) {
-            updatedItem.setOrder(updateParam.getOrder());
-        }
-
-        if (updateParam.getCompleted() != null) {
-            updatedItem.setCompleted(updateParam.getCompleted());
-        }
+        updatedItem.setTitle(updateParam.getTitle());
+        updatedItem.setOrder(updateParam.getOrder());
+        updatedItem.setCompleted(updateParam.getCompleted());
 
         itemRepository.save(updatedItem);
 
@@ -45,7 +40,8 @@ public class ItemService {
     }
 
     public Optional<Item> findById(Long id) {
-        return itemRepository.findById(id);
+        Optional<Item> item = itemRepository.findById(id);
+        return Optional.ofNullable(item.orElseThrow(() -> new CustomException(ID_NOT_FOUND)));
     }
 
     public List<Item> findItems() {
@@ -53,6 +49,9 @@ public class ItemService {
     }
 
     public void deleteById(Long id) {
+        if (itemRepository.existsById(id) == false) {
+            throw new CustomException(ID_NOT_FOUND);
+        }
         itemRepository.deleteById(id);
     }
 

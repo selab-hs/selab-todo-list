@@ -4,6 +4,7 @@ import kr.co.selab.selabtodo.domain.Item;
 import kr.co.selab.selabtodo.repository.*;
 import kr.co.selab.selabtodo.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,25 +28,25 @@ public class ItemController {
         return ResponseEntity.ok(item);
     }
 
-    @PostMapping("/post/list")
+    @PostMapping
     public ResponseEntity<ItemSaveResponseDto> addItem(@Valid @RequestBody ItemSaveRequestDto item) {
         ItemSaveResponseDto savedItem = itemService.save(item);
-        return ResponseEntity.ok(savedItem);
+        return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/edit/{itemId}")
-    public ResponseEntity<ItemUpdateResponseDto> edit(@PathVariable Long itemId, @RequestBody ItemUpdateRequestDto updateParam) {
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<ItemUpdateResponseDto> edit(@PathVariable Long itemId, @Valid @RequestBody ItemUpdateRequestDto updateParam) {
         ItemUpdateResponseDto updatedItem = itemService.update(itemId, updateParam);
         return ResponseEntity.ok(updatedItem);
     }
 
-    @DeleteMapping("/delete/{itemId}")
+    @DeleteMapping("/{itemId}")
     public ResponseEntity<List<Item>> deleteById(@PathVariable Long itemId) {
         itemService.deleteById(itemId);
         return ResponseEntity.ok(itemService.findItems());
     }
 
-    @DeleteMapping("/delete/lists")
+    @DeleteMapping
     public void deleteAll() {
         itemService.deleteAll();
     }
