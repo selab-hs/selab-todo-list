@@ -17,12 +17,8 @@ public class TodoService {
     private final TodoRepository repository;
 
     @Transactional(readOnly = true)
-    public TodoResponseDto searchTodo(long id){
-        try {
-            return repository.findById(id).orElseThrow(RelationNotFoundException::new).toTodoResponseDto();
-        } catch (RelationNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public TodoResponseDto searchTodo(long id) throws RelationNotFoundException {
+        return repository.findById(id).orElseThrow(RelationNotFoundException::new).toTodoResponseDto();
     }
 
     @Transactional
@@ -31,7 +27,7 @@ public class TodoService {
     }
 
     @Transactional
-    public TodoResponseDto updateTodo(long id, UpdateTodoRequestDto todo) {
+    public TodoResponseDto updateTodo(long id, UpdateTodoRequestDto todo) throws RelationNotFoundException {
         return repository.save(searchTodo(id).updateTodo(id, todo)).toTodoResponseDto();
     }
 
