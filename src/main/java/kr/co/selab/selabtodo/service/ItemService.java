@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static kr.co.selab.selabtodo.exception.ErrorCode.*;
 
@@ -22,10 +23,16 @@ public class ItemService {
     public ItemSaveResponseDto save(ItemSaveRequestDto item) {
         Item savedItem = new Item(item.getTitle(), item.getOrder());
         itemRepository.save(savedItem);
-        ItemSaveResponseDto savedDto = new ItemSaveResponseDto(savedItem.getId(), savedItem.getTitle(), savedItem.getOrder(), savedItem.getCompleted());
+
+        ItemSaveResponseDto savedDto = new ItemSaveResponseDto(
+                savedItem.getId(),
+                savedItem.getTitle(),
+                savedItem.getOrder(),
+                savedItem.getCompleted());
         return savedDto;
     }
 
+    @Transactional
     public ItemUpdateResponseDto update(Long itemId, ItemUpdateRequestDto updateParam) {
         Item updatedItem = itemRepository.findById(itemId).orElseThrow(() -> new CustomException(ID_NOT_FOUND));
 
@@ -33,19 +40,26 @@ public class ItemService {
         updatedItem.setOrder(updateParam.getOrder());
         updatedItem.setCompleted(updateParam.getCompleted());
 
-        itemRepository.save(updatedItem);
-
-        ItemUpdateResponseDto updatedDto = new ItemUpdateResponseDto(updatedItem.getId(), updatedItem.getTitle(), updatedItem.getOrder(), updatedItem.getCompleted());
+        ItemUpdateResponseDto updatedDto = new ItemUpdateResponseDto(
+                updatedItem.getId(),
+                updatedItem.getTitle(),
+                updatedItem.getOrder(),
+                updatedItem.getCompleted());
         return updatedDto;
     }
 
-    public Optional<Item> findById(Long id) {
-        Optional<Item> item = itemRepository.findById(id);
-        return Optional.ofNullable(item.orElseThrow(() -> new CustomException(ID_NOT_FOUND)));
+    public Optional<ItemRepositoryDto> findById(Long id) {
+        Optional<Item> findItem = itemRepository.findById(id);
+        ItemRepositoryDto findItemDto = new ItemRepositoryDto(
+                findItem.orElseThrow(() -> new CustomException(ID_NOT_FOUND))
+        );
+        return Optional.of(findItemDto);
     }
 
-    public List<Item> findItems() {
-        return itemRepository.findAll();
+    public List<ItemRepositoryDto> findItems() {
+        return itemRepository.findAll().stream()
+                .map(ItemRepositoryDto::new)
+                .collect(Collectors.toList());
     }
 
     public void deleteById(Long id) {

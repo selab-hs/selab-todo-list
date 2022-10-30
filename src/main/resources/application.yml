@@ -16,3 +16,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    kr.co.selab.selabtodo.exception.exhandler: debug

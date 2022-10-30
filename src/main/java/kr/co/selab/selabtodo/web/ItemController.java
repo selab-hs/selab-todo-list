@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/api/todo-list")
 @RequiredArgsConstructor
@@ -18,13 +19,13 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public ResponseEntity<List<Item>> items() {
+    public ResponseEntity<List<ItemRepositoryDto>> items() {
         return ResponseEntity.ok(itemService.findItems());
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<Item> item(@PathVariable Long itemId) {
-        Item item = itemService.findById(itemId).get();
+    public ResponseEntity<ItemRepositoryDto> item(@PathVariable Long itemId) {
+        ItemRepositoryDto item = itemService.findById(itemId).get();
         return ResponseEntity.ok(item);
     }
 
@@ -43,7 +44,7 @@ public class ItemController {
     @DeleteMapping("/{itemId}")
     public ResponseEntity<List<Item>> deleteById(@PathVariable Long itemId) {
         itemService.deleteById(itemId);
-        return ResponseEntity.ok(itemService.findItems());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping
