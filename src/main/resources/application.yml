@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -12,11 +12,4 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/selab_todo_list?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&allowMultiQueries=true&autoReconnection=true&characterEncoding=UTF-8
     username: root
-    password: 1234
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-logging:
-  level:
-    kr.co.selab.selabtodo.exception.exhandler: debug
+    password:
