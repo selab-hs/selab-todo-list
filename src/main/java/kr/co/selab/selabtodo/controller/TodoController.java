@@ -31,8 +31,7 @@ public class TodoController{
     @PatchMapping("/{id}")
     public ResponseEntity<TodoResponseDto> updateTodo(@PathVariable @Positive long id,
                                                       @RequestBody UpdateTodoRequestDto todo) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(service.updateTodo(id,todo));
+        return ResponseEntity.ok(service.updateTodo(id,todo));
     }
 
     @Operation(summary = "Delete Todo-List", description = "id를 통한 Todo-List 삭제")
@@ -43,14 +42,14 @@ public class TodoController{
     }
 
     @Operation(summary = "Search Todo-List Page", description = "특정 페이지의 Todo-List를 5개씩 역순으로 조회")
-    @GetMapping
+    @GetMapping("/page")
     public ResponseEntity<InquiryTodoPageResponseDto> searchPageTodos(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) @PositiveOrZero Pageable page){
         return ResponseEntity.ok(service.searchPageTodos(page));
     }
 
     @Operation(summary = "Search All Todo-List", description = "모든 Todo-List 조회")
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<InquiryTodoResponseDto> searchTodos(){
         return ResponseEntity.ok(service.searchAllTodos());
     }

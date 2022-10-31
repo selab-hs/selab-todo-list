@@ -2,6 +2,7 @@ package kr.co.selab.selabtodo.entity;
 
 import kr.co.selab.selabtodo.common.BaseEntity;
 import kr.co.selab.selabtodo.dto.TodoResponseDto;
+import kr.co.selab.selabtodo.dto.UpdateTodoRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,5 +50,11 @@ public class TodoEntity extends BaseEntity{
                 .content(this.content)
                 .checked(this.checked)
                 .build();
+    }
+
+    public void updateTodoEntity(UpdateTodoRequestDto todo){
+        this.title = todo.getTitle();
+        this.content = todo.getContent();
+        this.checked = todo.isChecked();
     }
 }

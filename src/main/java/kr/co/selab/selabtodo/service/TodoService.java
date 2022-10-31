@@ -17,10 +17,9 @@ public class TodoService {
     private final TodoRepository repository;
 
     @Transactional(readOnly = true)
-    public TodoResponseDto searchTodo(long id){
+    public TodoEntity searchTodo(long id){
         return repository.findById(id)
-                .orElseThrow(NotExistTodoException::new)
-                .toTodoResponseDto();
+                .orElseThrow(NotExistTodoException::new);
     }
 
     @Transactional
@@ -31,28 +30,34 @@ public class TodoService {
 
     @Transactional
     public TodoResponseDto updateTodo(long id, UpdateTodoRequestDto todo) {
-        return repository.save(searchTodo(id)
-                .updateTodo(id, todo))
-                .toTodoResponseDto();
+        var response = searchTodo(id);
+        response.updateTodoEntity(todo);
+
+        return response.toTodoResponseDto();
     }
 
     @Transactional
     public void deleteTodoById(long id) {
+
         repository.deleteById(searchTodo(id).getId());
     }
 
     @Transactional(readOnly = true)
     public InquiryTodoResponseDto searchAllTodos() {
-        return new InquiryTodoResponseDto(repository.findAll().stream()
+        var response = repository.findAll().stream()
                 .map(TodoEntity::toTodoResponseDto)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        return new InquiryTodoResponseDto(response);
     }
 
     @Transactional(readOnly = true)
     public InquiryTodoPageResponseDto searchPageTodos(Pageable page) {
-        return new InquiryTodoPageResponseDto(page.getPageNumber(),
-                repository.findAll(page).stream()
+        int pageNumber = page.getPageNumber();
+        var response = repository.findAll(page).stream()
                 .map(TodoEntity::toTodoResponseDto)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        return new InquiryTodoPageResponseDto(pageNumber, response);
     }
 }
